@@ -1,0 +1,31 @@
+<?php
+$func = create_function('', 'echo "Function created dynamic";');
+echo $func; // lambda_1
+$func();    // Function created dynamic
+$my_func = 'lambda_1';
+$my_func(); // 不存在这个函数
+lambda_1(); // 不存在这个函数
+
+class Callme {
+public function __invoke($phone_num) {
+	        echo "Hello: $num";
+	    }
+}
+$call = new Callme();
+$call(13810688888); // "Hello: 13810688888
+
+$func = function() {
+  echo "Hello, anonymous function";
+}
+echo gettype($func);    // object
+echo get_class($func);  // Closure
+
+function getCounter() {
+	    $i = 0;
+	    return function() use($i) { // 这里如果使用引用传入变量: use(&$i)
+	        echo ++$i;
+    };
+}
+$counter = getCounter();
+$counter(); // 1
+$counter(); // 1
