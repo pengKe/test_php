@@ -29,3 +29,4 @@ function getCounter() {
 $counter = getCounter();
 $counter(); // 1
 $counter(); // 1
+//http://www.nowamagic.net/librarys/veda/detail/1490
