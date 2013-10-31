@@ -1,0 +1,152 @@
+<?php
+// “I am a student”反转成为“student a am I”  
+ function rev_str($str){
+   $tmp=strrev($str);
+   $tmp_word='';
+   $arr=array();
+   for($i=0;$i<strlen($tmp);$i++)
+   {     
+	  if($tmp{$i}!=' ')
+	  {
+	    $tmp_word.=$tmp{$i};
+		$arr[]= $i==strlen($tmp)-1?strrev($tmp_word):'';
+	  }
+	  else if($tmp{$i}==' ')
+	  {	     
+		  if($tmp_word!='')
+		 {
+		   $arr[]=strrev($tmp_word); 
+		   $tmp_word='';		 
+		 } 
+		 $arr[]=' ';
+	  }
+   }
+   return str_replace('*',' ',implode('',$arr));
+ }
+//echo rev_str('I am a student');
+//把字符串abcdef左旋转2位得到字符串cdefab
+function leftShift($str,$k)
+{ 
+  $k%=strlen($str);
+  while($k--)
+  { 
+    $t=$str{0};
+	for($i=1;$i<strlen($str);$i++)
+	{
+	   $str{$i-1}=$str{$i};  
+	}
+	$str[strlen($str)-1]=$t;
+  }
+  return $str;
+}
+/**echo leftShift('abcdef',2);
+写一个function实现数组内每个元素之间加法的递代运算?
+注:数组元素全部为自然数.
+例:
+$data=array(1,2,3);
+程序要求打印出数组每个数组元素相互之间各种可能性加法(包括元素自已本身加法)
+*/
+$data=array(1,2,3);
+function AddNumber($data){
+    $len=count($data);
+    for($i=0;$i<$len;$i++){
+        for($j=$i;$j<$len;$j++){
+            $array[$i][$j]=$data[$i]+$data[$j];
+        }
+    }
+    return $array;
+}
+
+//print_r(AddNumber($data));
+/*
+*一群猴子排成一圈，按1，2，…，n依次编号。然后从第1只开始数，
+*数到第m只,把它踢出圈，从它后面再开始数，再数到第m只，在把它踢出去…，
+*如此不停的进行下去，直到最后只剩下一只猴子为止，那只猴子就叫做大王。
+*要求编程模拟此过程，输入m、n, 输出最后那个大王的编号。
+*/
+
+function king($n, $m){
+    $monkeys = range(1, $n);
+    $i=0;
+    $k=$n;
+    while (count($monkeys)>1) {
+        if(($i+1)%$m==0) {
+            unset($monkeys[$i]);
+        } else {
+            array_push($monkeys,$monkeys[$i]);
+            unset($monkeys[$i]);
+        }
+        $i++;
+    }
+    return current($monkeys);
+}
+//var_dump(king(5, 2));
+//String1:ABCDEFGHLMNOPQRS String2:DCGSQPOM String2的字母是否String1都有
+function compareString($long_str,$short_str)
+{
+  for($i=0,$short_count=strlen($short_str);$i<$short_count;$i++)
+  {
+      for($j=0,$long_count=strlen($long_str);$j<$long_count;$j++)
+	  {
+	       if($long_str{$j}==$short_str{$i})
+           break;		   
+	  }
+	  if($j==strlen($long_str))
+	  {
+	       return -1;
+	  }
+  }
+  return 1;
+}
+//echo compareString('ABCDEFGHLMNOPQRS','DZ');
+//字符串匹配 假设两个字符串中所含有的字符和个数都相同我们就叫两个字符串匹配，比如：abcda和adabc
+function is_match($str1,$str2)
+{
+   $lenOfStr1=strlen($str1);
+   $lenOfStr2=strlen($str2);
+   if($lenOfStr1!=$lenOfStr2)
+   return -1;
+   $i=1;
+   $hash=array();
+   /**while($i<=26)
+   {
+      $hash[$i]=$i;
+	  $i++;
+   }*/
+   while( ($hash[$i++]=0) || $i<=26 || ($hash[26]=0))
+   ;
+    for($i=0;$i<$lenOfStr1;$i++)
+   {
+      $index=ord($str1{$i})-ord('a')+1;
+	  $hash[$index]++;
+   }
+   for($i=0;$i<$lenOfStr2;$i++)
+   {
+      $index=ord($str2{$i})-ord('a')+1;
+	  if($hash[$index]!=0)
+	    $hash[$index]--;
+	  else
+	    return -1;
+	   
+   }
+   return 1;
+}
+//echo is_match('afz','zaf');
+//给定一个字符串A，要求在A中查找一个子串B。如A='ABCSD',要你在A中查找子串B='CD',相当于实现strstr函数 (乱写)
+function strstr_($str,$substr)
+{
+  $lenOfStr=strlen($str);
+  $lenOfSubstr=strlen($substr);
+  for($i=0;$i<$lenOfStr-$lenOfSubstr;$i++)
+  {
+    for($j=0;$j<$lenOfSubstr;$j++)
+	{
+	   if(substr($str,$i+$j,$lenOfSubstr)==substr($substr,$j))
+	   break;
+	}
+	if($j==$lenOfSubstr)
+	  return $i+1;
+  }
+  return 0;
+}
+//echo strstr_('ABCDE','CD'); 
