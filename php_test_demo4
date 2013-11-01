@@ -1,0 +1,27 @@
+<?php
+function str_2_int($str)
+{
+  $lenOfStr=strlen($str);
+  if($lenOfStr==0)
+     return -1;
+  $pos=0;
+  $sym=1;
+  if($str{$pos}=='+')
+     $pos++;
+  else if($str{$pos}=='-')
+  {
+    $sym*=-1;
+    $pos++;
+  }
+   $num=0;
+   while($pos<$lenOfStr)
+  {
+     if( ord($str{$pos})-ord('0')<0 || ord($str{$pos})-ord('9')>0)
+	    return -1;
+     $num=$num*10+	ord($str{$pos})-ord('1')+1;
+     $pos++;	 
+  }
+  $num*=$sym;
+  return $num;   
+} 
+//echo str_2_int('-3450');
