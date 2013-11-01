@@ -25,3 +25,16 @@ function str_2_int($str)
   return $num;   
 } 
 //echo str_2_int('-3450');
+function Fibona($n)
+{
+    if($n==0)
+        return 0;
+    else if($n==1||$n==2)
+        return 1;
+    else
+    {
+       $m=Fibona($n-1)+Fibona($n-2);
+        return $m;
+    }
+}
+//echo Fibona(4);
