@@ -1,0 +1,22 @@
+<?php
+function toBin($num)  //202
+{
+  $bin='';
+  while($num>1){     
+      $bin.=$num%2;
+	  $num=$num/2;
+  }
+  return strrev($bin);
+}
+echo toBin(202);
+function toDec($num){  //11001010
+   $count=strlen((String)$num);
+   $num_str=(String)$num;
+   $dec=0;
+   for($i=$count;$i>0;$i--)
+   {
+      $dec+=$num_str{$i-1}*pow(2,8-$i);
+   }
+   return $dec;
+}
+echo toDec(11001010);
