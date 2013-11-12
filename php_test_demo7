@@ -1,0 +1,11 @@
+<?php
+mysql_connect("localhost","root","") or die(mysql_error());
+mysql_select_db("boliya");
+$result=mysql_query("select id,pid,name from pa_area");
+$row=array();
+while($row[]=mysql_fetch_array($result,MYSQL_NUM)) //mysql_fetch_row  mysql_fetch_array mysql_fetch_assoc
+ ;//{ echo $row[0],$row[1],$row[2]."<br/>"; }
+mysql_free_result($result);
+//var_dump($row);
+$arr=array('c'=>'d')+array('a'=>'a','b'=>'b','c'=>'c');
+print_r($arr);
