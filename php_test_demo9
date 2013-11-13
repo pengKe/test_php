@@ -1,0 +1,49 @@
+<?php
+function _hash($key,$m){
+  $strlen=strlen($key);
+  $hashval=0;
+  for($i=0;$i<$strlen;$i++)
+  {
+   $hashval+=ord($key{$i});
+  }
+  return $hashval%$m;
+}
+echo _hash('dsferfrgregfte',13);
+/**
+unsigned int DJBHASH(char *str){
+   unsigned int hash=5381;
+   while(*str){
+      hash+=(hash<<5)+(*str++);
+   }
+   return (hash & 0x7FFFFFFF);
+}
+*/
+class HashTable{
+  private $buckets;
+  private $size=10;
+  public function __construct(){
+     $this->buckets=new SplFixedArray($this->size);
+  }
+  public function hashash($key){
+      $strlen=strlen($key);
+	  $hashval=0;
+      for($i=0;$i<$strlen;$i++)
+     {
+         $hashval+=ord($key{$i});
+     }
+     return $hashval%$this->size;
+  }
+  public function insert($key,$val){
+       $index=$this->hashash($key);
+	   $this->buckets[$index]=$val;
+  }
+  public function find($key){
+       $index=$this->hashash($key);
+	   return  $this->buckets[$index];
+  }
+}
+$ht=new HashTable();
+$ht->insert('key1','value1');
+$ht->insert('key2','value2');
+echo $ht->find('key1');
+echo $ht->find('key2');
