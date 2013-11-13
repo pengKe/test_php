@@ -1,0 +1,45 @@
+<?php
+//部分代码略
+//返回编译文件的文件名，以后存在存在路径处理故封装
+public function path(){
+  return $this->cache_file=$this->arrayConfig['cachedir'].
+  $this->file.$this->arrayConfig['suffix_cache'];
+}
+//开始编译
+public function compile(){
+   $this->message=ob_get_contents();
+   @file_put_contents($this->path(),$this->message);
+}
+/*
+*显示模板
+*@param string $file
+*/
+public function show($file){
+  $this->file=$file;
+  $PIG_TPL_FILE=$this->arrayConfig['templateDir'].$file.$this->arrayConfig['suffix'];
+  //先判断缓存文件是否存在
+  if(is_file($this->path())){
+     $old=$_SERVER['REQUEST_TIME']-filemtime($this->path())>=$this->arrayConfig['cache_time']?1:0;//判断缓存是否过期
+  }else{
+     $old=0;
+  }
+  if(true==$this->arrayConfig['cache_htm']){//如果需要静态编译
+           if(is_file($this->path()) && !$old){
+		     readfile($this->path());//静态编译文件存在且未过期
+		   }else{
+		     if(is_file($PIG_TPL_FILE)){
+			   ob_start();
+			   extract($this->value);
+			   include($PIG_TPL_FILE);
+			   $this->compile();
+			 }else{die('找不到模板文件');}
+		   }
+  }else{
+     if(is_file($PIG_TPL_FILE)){
+	     extract($this->value);
+	     include($PIG_TPL_FILE);
+	 }else{
+	   die('找不到模板文件:'.$PIG_TPL_FILE);
+	 }
+  }
+}
