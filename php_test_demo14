@@ -1,0 +1,11 @@
+<?php
+class A{
+  public $user=1;
+  private $pwd=2;
+  public function __toString(){
+     return 'user:'.$this->user.'pwd:'.$this->pwd;
+  }
+}
+$a=new A();
+ echo $a;
+// print_r($a);
