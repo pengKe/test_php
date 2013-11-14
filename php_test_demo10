@@ -1,0 +1,12 @@
+<?php
+$fp=fopen("data.dat","wb");
+$bin=pack("L",12);
+fwrite($fp,$bin,4);
+fclose($fp);
+
+$fp=fopen("data.dat","rb");
+$bin=fread($fp,4);
+$pack=unpack("L",$bin);
+fclose($fp);
+
+print_r($pack);
