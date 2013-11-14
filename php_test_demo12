@@ -1,0 +1,87 @@
+<?php
+class Account{
+   public function __set($name,$value){
+      echo "Setting $name to $value\r\n";
+	  $this->$name=$value;
+   }
+   public function __get($name)
+   {
+     if(!isset($this->$name)){
+	   echo '未设置';
+	   $this->$name="正在为您设置默认值";	   
+	 }
+	   return $this->$name;
+   }
+}
+$a=new Account();
+echo $a->user;
+$a->name=5;
+echo $a->name;
+echo $a->big;
+/**
+  public function __call($name,$arguments){
+    switch(count($arguments)){
+	    case 2:
+		  echo $arguments[0]*$arguments[1],PHP_EOL;
+		  break;
+		case 3:
+          echo array_sum($arguments),PHP_EOL;
+          break;
+		default:
+          echo '参数不对',PHP_EOL;
+          break; 		  
+	}
+  }
+  $a->make(5);
+  $a->make(5,6);
+*/
+abstract class ActiveRecord
+{
+  protected static $table;
+  protected $fieldvalues;
+  public $select;
+  static function findById($id){
+     $query="select * from "
+	  .static::$table
+	  ." where id=$id";
+	  return self::createDomain($query);
+  }
+  function __get($fieldname){
+     return $this->fieldvalues[$fieldname];
+  }
+  static function __callStatic($method,$args){
+     $field=preg_match('/^findBy(\w*)$/','${1}',$method);
+	 $query="select * from "
+	  .static::$table
+	  ." where $field='$args[0]' ";
+	  return self::createDomain($query);
+  }  
+  private static function createDomain($query){
+       $klass=get_called_class();
+	   $domain=new $klass();
+	   $domain->fieldvalues=array();
+	   $domain->select=$query;
+	   foreach($klass::$fields as $field=>$type){
+	      $domain->fieldvalues[$field]='TODO: set from sql result';
+	   } 
+	   return $domain;
+  }
+}
+class Customer extends ActiveRecord{
+     protected static $table='custdb';
+     protected $field=array(
+	    'id'=>'int',
+		'email'=>'varchar',
+		'lastname'=>'varchar'
+	 );
+}
+class Sales extends ActiveRecord{
+     protected static $table='salesdb';
+     protected $field=array(
+	    'id'=>'int',
+		'item'=>'varchar',
+		'qty'=>'int'
+	 );
+}
+// Customer::findById(123)->select;
+//assert("select * from custdb where id=123"==Customer::findById(123)->select);
