@@ -1,0 +1,37 @@
+<?php
+/**
+function customError($errno,$errstr,$errfile,$errline)
+{
+  echo "<b>错误代码:</b>[{$errno}]{$errstr}\r\n";
+  echo "错误所在代码行:{$errline}文件{$errfile}\r\n";
+  echo "php版本",PHP_VERSION,"(",PHP_OS,")\r\n";
+}*/
+function customError($errno,$errstr,$errfile,$errline)
+{
+  throw new Exception($errno.'|'.$errstr);
+}
+set_error_handler("customError",E_ALL | E_STRICT);
+//$a=array('o'=>2,4,6,8);
+//echo $a[o];
+try{
+  $a=5/0;
+}catch(Exception $e){
+   echo '错误信息',$e->getMessage();
+}
+class Shutdown{
+   public function stop(){
+      if(error_get_last())
+	  {
+	   print_r(error_get_last());
+	  }
+	  die('stop.');
+   }
+}
+register_shutdown_function(array(new Shutdown(),'stop'));
+$a=new a();
+echo '必须终止';
+$div=0;
+if($div==0){
+  trigger_error('Cannot divide by zero',E_USER_ERROR);
+}
+echo 'break';
