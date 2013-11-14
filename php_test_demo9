@@ -47,3 +47,37 @@ $ht->insert('key1','value1');
 $ht->insert('key2','value2');
 echo $ht->find('key1');
 echo $ht->find('key2');
+
+class HashNode{
+   public $key;
+   public $value;
+   public $nextNode;
+   public function __construction($key,$value,$nextNode=NULL)
+   {
+     $this->key=$key;
+	 $this->value=$value;
+	 $this->nextNode=$nextNode;
+   }
+}
+/**
+public function insert($key,$value){
+  $index=$this->hashfunc($key);
+  if(isset($this->buckets[$index])){
+    $newNode=new HashNode($key,$value,$this->buckets[$index]);
+  }else{
+    $newNode=new HashNode($key,$value,NULL);
+  }
+  $this->buckets[$index]=$newNode;
+}
+public function find($key){
+  $index=$this->hashfunc($key);
+  $current=$this->buckets[$index];
+  while(isset($current)){
+     if($current->key==$key){
+	   return $current->value;
+	 }
+	 $current=$current->nextNode;
+  }
+  return NULL;
+}
+*/
