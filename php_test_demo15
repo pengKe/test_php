@@ -1,0 +1,42 @@
+<?php
+//计算一组数字的“平均数”
+function mean1($numbers)
+{
+  $sum=0;
+  $size=count($numbers);
+  for($i=0;$i<$size;$i++)
+  {
+    $sum+=$numbers[$i];
+  }
+  $average=$sum/$size;
+  return $average;
+}
+function mean2()
+{
+ //初始化以消除警告
+ $sum   =  0;
+ //传递到函数的个数
+ $size  = func_num_args();
+ //迭代遍历所有参数并加总它们的值
+ for($i = 0 ;$i < $size ;$i++ ){
+   $sum+=func_get_arg($i);
+ }
+ //用个数来除总
+ $average=$sum/$size;
+ //返回平均值
+ return $average;
+ }
+ function mean3()
+{
+ 
+ $sum   =  0;
+ $numbers  = func_get_args();
+ $size=count($numbers);
+ for($i = 0 ;$i < $size ;$i++ ){
+    $sum+=$numbers[$i];
+ }
+ $average=$sum/$size;
+ return $average;
+ }
+ $mean=mean3(96,93,97);
+ echo $mean;
