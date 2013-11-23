@@ -1,0 +1,98 @@
+<?php
+print "The sauce cost \$\061\060.\x32\x35.";
+$a='123456';
+print <<<END
+"testtesttesttest"<br/>
+$a
+END;
+$listItem='The List Item';
+$html=<<<END
+<div class="class1">
+<ul class="class2">
+<li>
+END
+.$listItem.'</li></div>';
+print $html;
+$email='pk694791@gmail.com';
+if(strpos($email,'@')!==false)
+print 'There was  @ in the e-mail address!'.'<br/>';
+//$substring=substr($string,$start,$length);
+print substr('watch out for that tree',6,5).'<br/>';
+print substr('watch out for that tree',17).'<br/>';
+print substr('watch out for that tree',20,5).'<br/>';
+print substr('watch out for that tree',-6).'<br/>';
+print substr('watch out for that tree',-17,5).'<br/>';
+print substr('watch out for that tree',15,-2).'<br/>';
+print substr('watch out for that tree',-4,-1).'<br/>';
+//$new_string=substr_replace($old_string,$new_substring.$start,$length);
+ print substr_replace('My pet is a blue dog.','fish',-9).'<br/>';
+ print substr_replace('My pet is a blue dog.','green',-9,4).'<br/>';
+ print substr_replace('My pet is a blue dog.','Title:',0,0).'<br/>';
+ print substr_replace('My pet is a blue dog.','...',10).'<br/>';
+ function lookandsay($s){
+   $r='';
+   $m=$s[0];
+   $n=1;
+   for($i=1,$j=strlen($s);$i<$j;$i++)
+   {
+     if($s[$i]==$m){
+	    $n++;
+	 }else{
+	    $r.=$n.$m;
+		$m=$s[$i];
+		$n=1;
+	 }
+   }
+    return $r.$n.$m;
+ }
+ for($i=0,$s=1;$i<10;$i++){
+    $s=lookandsay($s);
+	print "$s<br/>\n";
+ }
+ print strrev('This is not a palindrome').'<br/>';
+ $s='This is not a palindrome';
+ $words=explode(' ',$s);
+ $words=array_reverse($words);
+ $s=implode(' ',$words);
+ print $s.'<br/>';
+ print implode(' ',array_reverse(explode(' ',$s))).'<br/>';
+ function pc_tab_expand($text){
+   while(strstr($text,"\t")){
+     $text=preg_replace_callback('/^([^\t\n]*)(\t+)/m','pc_tab_expand_helper',$text);
+   }
+   return $text;
+ }
+ function pc_tab_expand_helper($matches){
+    $tab_stop=8;
+	return $matches[1].
+	str_repeat(' ',strlen($matches[2])*$tab_stop-(strlen($matches[1]% $tab_stop)));
+ }
+ function pc_tab_unexpand($text){
+   $tab_stop=8;
+   $lines=explode("\n",$text);
+   foreach($lines as $i=>$lines){
+      $line=pc_tab_expand($line);
+	  $chunks=str_split($line,$tab_stop);
+	  $chunkCount=count($chunks);
+	  for($j=0;$j<$chunkCount-1;$j++){
+            $chunks[$j]=preg_replace('/{2,}$/',"\t",$chunks[$j]); 	  
+	  }
+	  if($chunks[$chunkCount-1]==str_repeat(' ',$tab_stop)){
+	        $chunks[$chunkCount-1]="\t";
+	  }
+	  $lines[$i]=implode('',$chunks);
+   }
+   return implode("\n",$lines);
+ }
+ print ucfirst("how do you do today").'<br/>';
+ print ucfirst("the prince of wales").'<br/>';
+ $arr=array('abc'=>'a');print "{$arr['abc']}"."$arr[abc]";
+ print ltrim('10 print a$','0..9').rtrim('select * from turtles;',';').pack('A15','  haha ').str_pad('haha',25,'.').'<br/>';
+ //$words=split(' +','This sentence has some extra whitespace in it.');
+ //$words=preg_split('/\d\.','myday:1.get up 2.get dressed 3. get toast');
+ $words='A,B,C,D,E';
+ $math="3 + 2 /7 -9";
+ //$stack=preg_split('/*([+\-\/*])*/',$math,-1,PREG_SPLIT_DELIM_CAPTURE);
+ //$words_arr=explode(',',$words,4);//split(', ?',$words);
+ print wordwrap('jabberwocky',5,"\n",1);
+ ?>
