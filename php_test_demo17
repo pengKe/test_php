@@ -1,0 +1,58 @@
+<?php
+function time_parts($time){
+  return explode(':',$time);
+}
+list($h,$m,$s)=call_user_func_array('time_parts',array('12:34:56'));echo $h;
+//call_user_func('time_parts','12:34:56');
+print 'sasdsa';
+function t()
+{
+  return print 'haha';
+}
+echo t();
+$add=create_function('$i,$j','return $i+$j;');
+echo $add(1,1);
+//usort($files,create_function('$a,$b','return strnatcmp($b,$a);'));
+function t2($arr){
+  $a=array('a'=>'A',
+    'b'=>'B'
+  );
+  if(array_key_exists($arr,$a))
+  echo 'aaaaaaa';
+}
+t2('a');
+$a='b';
+$b=array('a'=>'A','b'=>'B');
+echo ${$a}['a'];
+function cnt(){
+  static $i=0;
+  $i++;
+  return $i;
+}
+echo cnt();echo cnt();echo cnt();
+$user_1=array('name'=>'Max B','username'=>'max');
+$user_2=array('name'=>'Leo Bloom','username'=>'leo');
+$user_2['friend']=&$user_1;
+$user_1['friend']=&$user_2;
+$user_1['job']='Swindler';
+$user_2['job']='Accountant';
+$output=print_r($user_2,true);
+//echo $output;
+ob_start();
+var_dump($user_2);echo $output;
+$dump=ob_get_contents();
+ob_end_clean();
+ob_end_flush();
+$arr2=array(1=>'a','b','c');
+$arr3=range(1,11,2);print_r($arr3);
+reset($arr2);
+while(list($item,$cost)=each($arr2))
+{
+  echo $item,$cost;
+}
+for(reset($arr2);$key=key($arr2),$value=current($arr2);next($arr2)){
+   echo $key,'|',$value;
+}
+$arr4=array_map('strtoupper',$arr2);settype($arr2,'array');
+print_r($arr4);
+print_r(array_pad($arr2,6,'d'));
