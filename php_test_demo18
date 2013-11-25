@@ -1,0 +1,65 @@
+<?php
+if(is_numeric(5))echo 'true<br/>';
+if(is_numeric('5'))echo 'true<br/>';
+if(is_numeric('05'))echo 'true<br/>';
+if(is_numeric('five'))echo 'true<br/>';else echo 'false<br/>';
+if(is_numeric(0xDECAFBAD))echo 'true<br/>';
+if(is_numeric('10e200'))echo 'true<br/>';
+$delta=0.0001;$a=1.0000001;$b=1.00000000;
+if(abs($a-$b)<$delta)echo 'nearly equal<br/>';
+$number=round(2.4);//2 
+$number=ceil(2.4);//3
+$number=floor(2.4);//2
+//如果一个数位于两个整数之间，php会向远离0的方向取整
+$number=round(2.5);//3 
+$number=round(-2.5);//-3
+$cart=54.23;
+$tax=$cart*.05;
+$total=$cart+$tax;
+$final=round($total,2); 
+range('l','p');//耗内存
+echo mt_rand(1,100),"<br/>";//mt_rand效率和随机性好于rand
+function pc_rand_weighted($numbers){
+   $total=0;
+   foreach($numbers as $number=>$weight){
+      $total+=$weight;
+	  $dis[$number]=$total;
+   }
+   $rand=mt_rand(0,$total-1);
+   foreach($dis as $number=>$weights){
+     if($rand<$weights) {return $number;}
+   }
+}
+$ads=array('ford'=>12234,
+           'att' =>33424,
+		   'ibm' =>16823);
+echo $ad=pc_rand_weighted($ads);
+$log=log(10);
+$log10=log10(10);
+$log2=log(10,2);
+$exp=pow(2,M_E);
+$exp=exp(2);
+//$exp=exp(-2,-2.5);	
+$num=1234.56;
+print number_format($num).'|'.number_format($num,2).'|'.number_format($num,2,'@','#');	
+list($int,$dec)=explode('.',$num);
+print '|'.number_format($num,strlen($dec));   
+setlocale(LC_ALL,'zh_CN');
+//print_r(localeconv());
+setlocale(LC_MONETARY,'en_US');
+//print money_format('%n',$num);print money_format('%i',$num);fr_FR it_IT
+//$cosine=cos(deg2rad($degree));
+$hex='a1';
+$decimal=base_convert($hex,16,10);
+printf('#%02X%02X%02X<br/>',0,102,204);
+$stamp=mktime(0,0,0,1,1,1986);
+echo date('l',$stamp);
+print strftime('%c')."<br/>".date('r');
+$now_1=getdate();
+$now_2=localtime();
+print "{$now_1['hours']}|$now_2[2]<br/>";
+$a=getdate(163727100);
+printf('%s,%d,%d',$a['month'],$a['mday'],$a['year']);
+$then=gmmktime(19,45,3,3,10,1975);
+print strftime('%c').date('m/d/Y')."<br/>";
+$a=strtotime('now');
