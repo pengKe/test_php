@@ -1,0 +1,53 @@
+<?php
+class convert{
+   public static function c2f($degrees){
+      return (1.8*$degrees)+32;
+   }
+}
+$a=new convert;
+//print_r($a);
+function  test(){
+   $allCount=0;
+   $equalCount=0;
+   for($i=0;$i<1000000;$i++)
+   {
+     if(rand(1,100) == rand(1,100)){
+	    $equalCount++;
+	 }
+	 $allCount++;
+   }
+   echo $equalCount/$allCount;
+}
+//test();
+//print_r(get_declared_classes());
+//print_r(get_defined_functions());
+function t(){
+  echo 123;
+  return 456;
+}
+echo t(),$_COOKIE[session_name()],(string)date('W');
+ini_set('session.use_only_cookies',true);
+function inject_session_token($buffer){
+   $hyberlink_pattern="/<a[^>]+href=\"([^\"])/i";
+   preg_match_all($hyberlink_pattern,$buffer,$mtches);
+   foreach($matches[1] as $link){
+      if(strpos($link,'?')===false){
+	     $newlink=$link.'?token='.$_SESSION['token'];
+	  }else{
+	     $newlink=$link.='&token='.$_SESSION['token'];
+	  }
+	  $buffer=str_replace($link,$newlink,$buffer);
+   }
+   return $buffer;
+}
+//ini_get('session.auto_start') or session_start()'
+//echo stream_context_create(array('123'=>'456'));
+header("Expires: 0");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")."  GMT");
+header("Cache-Control:no-store,no-cache,must-revalidate");
+//添加一些IE专有的选项
+header("Cache-Control:post-check=0,pre-check=0",false);
+//针对HTTP/1.0
+header("Pragma: no-cache");
+//print_r($_SERVER['argv'][1]);
+?>
