@@ -1,0 +1,11 @@
+<?php
+function s($num){
+   $x=1; 
+   do{
+      $x0=$x;
+	  $x=1+($num-1)/($x+1);
+   }while(abs($x-$x0)>0.000000001);
+   return $x;
+}
+//echo s(2);
+?>
